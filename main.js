@@ -18,14 +18,27 @@ $(function () {
         });
 
     var publishable_key = "rf_FovOcxHRqZZ7J8hbhepssTXAokw2";
+
+    // Default to version 5
     var toLoad = { model: "deteksi-logo-tcoed", version: 5 };
 
-    const loadModelPromise = new Promise(function (resolve) {
-        roboflow.auth({ publishable_key: publishable_key }).load(toLoad).then(function (m) {
-            model = m;
-            resolve();
+    // Dropdown handler to change model version
+    $("#model-version").on("change", function () {
+        const selectedVersion = parseInt($(this).val(), 10);
+        $("body").addClass("loading");
+        toLoad.version = selectedVersion; // Update version
+        loadModel(toLoad).then(function () {
+            $("body").removeClass("loading");
         });
     });
+
+    const loadModel = function (toLoad) {
+        return roboflow.auth({ publishable_key: publishable_key }).load(toLoad).then(function (m) {
+            model = m;
+        });
+    };
+
+    const loadModelPromise = loadModel(toLoad);
 
     Promise.all([startVideoStreamPromise, loadModelPromise]).then(function () {
         $("body").removeClass("loading");
@@ -110,7 +123,6 @@ $(function () {
             }, 5000);
         }
     };
-    
 
     var prevTime;
     var pastFrameTimes = [];
