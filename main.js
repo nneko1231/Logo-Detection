@@ -19,14 +19,29 @@ $(function () {
 
     var publishable_key = "rf_FovOcxHRqZZ7J8hbhepssTXAokw2";
 
-    // Default to version 5
+    // Default to Versi 1
     var toLoad = { model: "deteksi-logo-tcoed", version: 5 };
 
     // Dropdown handler to change model version
     $("#model-version").on("change", function () {
         const selectedVersion = parseInt($(this).val(), 10);
         $("body").addClass("loading");
-        toLoad.version = selectedVersion; // Update version
+
+        // Update model dan publishable_key sesuai pilihan
+        if (selectedVersion === 5) {
+            // Versi 1
+            publishable_key = "rf_FovOcxHRqZZ7J8hbhepssTXAokw2";
+            toLoad = { model: "deteksi-logo-tcoed", version: 5 };
+        } else if (selectedVersion === 6) {
+            // Versi 2
+            publishable_key = "rf_FovOcxHRqZZ7J8hbhepssTXAokw2";
+            toLoad = { model: "deteksi-logo-tcoed", version: 6 };
+        } else if (selectedVersion === 1) {
+            // Versi 3
+            publishable_key = "rf_1ei29qYADSMQC3VSVoC7VwUx3XG3";
+            toLoad = { model: "deteksi-logo-cl1eg", version: 1 };
+        }
+
         loadModel(toLoad).then(function () {
             $("body").removeClass("loading");
         });
